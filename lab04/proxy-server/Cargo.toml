@@ -1,0 +1,16 @@
+[package]
+name = "proxy-server"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+hyper = { version = "1.6.0", features = ["server", "http1"] }     
+http-body-util = "0.1.3"  
+reqwest = { version = "0.13.2", features = ["stream"] }
+tokio = { version = "1.44.2", features = ["rt-multi-thread", "macros"] }
+hyper-util = "0.1.20"
+http = "1.4.0"
+futures-util = "0.3.32"
+anyhow = "1.0.102"
+log = { version = "0.4.29", features = ["max_level_info"] }
+env_logger = "0.11.10"

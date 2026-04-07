@@ -5,9 +5,15 @@ use std::{
 };
 
 fn main() -> Result<(), anyhow::Error> {
-    let mut stream = TcpStream::connect("127.0.0.1:8080")?;
+    let mut args = env::args().skip(1);
+    let addr = format!(
+        "{}:{}",
+        args.next().expect("first argument should contain address"),
+        args.next().expect("second argument should contain port"),
+    );
+    let mut stream = TcpStream::connect(addr)?;
     let mut writer = BufWriter::new(stream.try_clone()?);
-    env::args().skip(1).try_for_each(|arg| {
+    env::args().skip(3).try_for_each(|arg| {
         writer.write_all(arg.as_bytes()).and_then(|_| writer.write_all(b"\r\n"))
     })?;
     writer.write_all(b"\r\n")?;

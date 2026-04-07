@@ -1,5 +1,5 @@
 use std::{
-    io::{BufReader, BufWriter, Read, Write}, net::{TcpListener, TcpStream}, os::unix::ffi::OsStrExt, process::{Command, Stdio}
+    env, io::{BufReader, BufWriter, Read, Write}, net::{TcpListener, TcpStream}, os::unix::ffi::OsStrExt, process::{Command, Stdio}
 };
 
 use anyhow::anyhow;
@@ -33,7 +33,13 @@ impl RemoteControlSocket for TcpStream {
 }    
 
 fn main() -> Result<(), anyhow::Error> {
-    let listener = TcpListener::bind("127.0.0.1:8080")?;
+    let mut args = env::args().skip(1);
+    let addr = format!(
+        "{}:{}",
+        args.next().expect("first argument should contain address"),
+        args.next().expect("second argument should contain port"),
+    );
+    let listener = TcpListener::bind(addr)?;
 
     //println!("{}", String::from_utf8_lossy(Command::new("lscpu").output()?.stdout.as_slice()));
 
